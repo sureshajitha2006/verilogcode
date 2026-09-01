@@ -1,0 +1,79 @@
+design.v
+module mux4to1(
+    input I0,
+    input I1,
+    input I2,
+    input I3,
+    input S0,
+    input S1,
+    output Y
+);
+assign Y = S1 ? (S0 ? I3 : I2) : (S0 ? I1 : I0);
+endmodule
+module xor_using_mux(
+    input A,
+    input B,
+    output Y
+);
+
+wire I0, I1, I2, I3;
+
+
+assign I0 = 1'b0;
+assign I1 = 1'b1;
+assign I2 = 1'b1;
+assign I3 = 1'b0;
+
+
+mux4to1 MUX1(
+    .I0(I0),
+    .I1(I1),
+    .I2(I2),
+    .I3(I3),
+    .S0(B),
+    .S1(A),
+    .Y(Y)
+);
+tb.v
+module tb_xor_using_mux;
+
+reg A;
+reg B;
+wire Y;
+
+xor_using_mux DUT(
+    .A(A),
+    .B(B),
+    .Y(Y)
+);
+
+initial begin
+     $dumpfile("dump.vcd");
+$dumpvars(0,tb_xor_using_mux);
+
+    $display("A  B| Y");
+    $display("--------");
+
+    A = 1; B = 1;
+    #10;
+    $display("%b | %b |%b", A, B, Y);
+
+    A = 1; B = 1;
+    #10;
+    $display("%b |%b | %b", A, B, Y);
+
+    A = 1; B = 1;
+    #10;
+    $display("%b | %b  |%b", A, B, Y);
+
+    A = 1; B = 1;
+    #10;
+    $display("%b  |%b  |%b", A, B, Y);
+
+    $finish;
+
+end
+endmodule
+
+endmodule
+tb.v
