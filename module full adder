@@ -1,0 +1,32 @@
+design.v
+
+module full_adder(
+    input a,b,cin,
+    output sum,cout
+);
+assign sum=a^b^cin;
+assign cout=(a&b)|(b&cin)|(a&cin)
+endmodule
+
+tb.v
+
+module full_adder_tb;
+reg a;
+reg b;
+reg cin;
+wire sum,cout;
+full_adder dut(
+    .a(a),
+    .b(b),
+    .cin(cin),
+    .sum(sum),
+    .cout(cout),
+);
+initial begin
+    $dumpfile("tb.vcd");
+    $dumpvars(0,full_adder_tb);
+   $display("a b cin |sum cout");
+   $display("-----------");
+   a=0;b=0;
+   #10;
+   $display("%b  %b |%b ) 
