@@ -1,0 +1,91 @@
+design.v
+
+module decoder2to4(
+    input [1:0] A,
+    input E,
+    output [3:0] Y
+);
+assign Y[0] = E & ~A[1] & ~A[0];
+assign Y[1] = E & ~A[1] &  A[0];
+assign Y[2] = E &  A[1] & ~A[0];
+assign Y[3] = E &  A[1] &  A[0];
+
+endmodule
+module decoder3to8(
+    input [2:0] A,
+    input E,
+    output [7:0] Y
+);
+
+wire E1, E2;
+assign E1 = E & ~A[2];
+assign E2 = E &  A[2];
+decoder2to4 D1(
+    .A(A[1:0]),
+    .E(E1),
+    .Y(Y[3:0])
+);
+decoder2to4 D2(
+    .A(A[1:0]),
+    .E(E2),
+    .Y(Y[7:4])
+);
+
+endmodule
+
+ tb.v
+module tb_decoder3to8;
+
+reg [2:0] A;
+reg E;
+wire [7:0] Y;
+decoder3to8 DUT(
+    .A(A),
+    .E(E),
+    .Y(Y)
+);
+
+initial begin
+$dumpfile("dump.vcd");
+$dumpvars(0,tb_decoder3to8);
+    $display("E  A  |  Y");
+    $display("----------------");
+
+    E = 1'b1;
+    A = 3'b000;
+    #10;
+    $display("%b| %b | %b", E, A, Y);
+
+    A = 3'b001;
+    #10;
+    $display("%b| %b | %b", E, A, Y);
+
+    A = 3'b010;
+    #10;
+    $display("%b | %b | %b", E, A, Y);
+
+    A = 3'b011;
+    #10;
+    $display("%b | %b | %b", E, A, Y);
+
+    A = 3'b100;
+    #10;
+    $display("%b | %b   | %b", E, A, Y);
+    A = 3'b101;
+    #10;
+    $display("%b | %b   | %b", E, A, Y);
+    A = 3'b110;
+    #10;
+    $display("%b | %b  |  %b", E, A, Y);
+    A = 3'b111;
+    #10;
+    $display("%b | %b   | %b", E, A, Y);
+   
+    A = 3'b010;
+    #10;
+    $display("%b | %b | %b", E, A, Y);
+
+    $finish;
+
+end
+endmodule 
