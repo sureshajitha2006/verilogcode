@@ -1,0 +1,76 @@
+design.v
+module gray_to_binary(
+    input  [3:0] G,
+    output [3:0] B
+);
+
+assign B[3] = G[3];
+assign B[2] = G[3] ^ G[2];
+assign B[1] = G[3] ^ G[2] ^ G[1];
+assign B[0] = G[3] ^ G[2] ^ G[1] ^ G[0];
+
+endmodule
+
+tb.v
+module tb_gray_to_binary;
+
+reg [3:0] G;
+wire [3:0] B;
+
+
+gray_to_binary DUT(
+    .G(G),
+    .B(B)
+);
+
+initial begin
+  $dumpfile("dump.vcd");
+ $dumpvars(0,tb_gray_to_binary);
+    $display("Gray  |  Binary");
+    $display("----------------");
+
+    G = 4'b0000;
+    #10;
+    $display("%b  | %b", G, B);
+
+    G = 4'b0001;
+    #10;
+    $display("%b  |  %b", G, B);
+
+    G = 4'b0011;
+    #10;
+    $display("%b |   %b", G, B);
+
+    G = 4'b0010;
+    #10;
+    $display("%b  |  %b", G, B);
+
+    G = 4'b0110;
+    #10;
+    $display("%b  |  %b", G, B);
+
+    G = 4'b0111;
+    #10;
+    $display("%b   |   %b", G, B);
+
+    G = 4'b0101;
+    #10;
+    $display("%b   |   %b", G, B);
+
+    G = 4'b0100;
+    #10;
+    $display("%b  |  %b", G, B);
+
+    G = 4'b1100;
+    #10;
+    $display("%b |    %b", G, B);
+
+    G = 4'b1111;
+    #10;
+    $display("%b   |   %b", G, B);
+
+    $finish;
+
+end
+
+endmodule
