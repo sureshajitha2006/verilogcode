@@ -1,0 +1,52 @@
+design.v
+module encoder4to2(
+    input  [3:0] D,
+    output [1:0] Y
+);
+
+assign Y[1] = D[2] | D[3];
+assign Y[0] = D[1] | D[3];
+
+endmodule
+
+tb.v
+
+
+
+module tb_encoder4to2;
+
+reg [3:0] D;
+wire [1:0] Y;
+
+encoder4to2 DUT(
+    .D(D),
+    .Y(Y)
+);
+
+initial begin
+ $dumpfile("dump.vcd");
+$dumpvars(0,tb_encoder4to2);
+
+    $display("D       Y");
+    $display("-----------");
+
+    D = 4'b0001;
+    #10;
+    $display("%b    %b", D, Y);
+
+    D = 4'b0010;
+    #10;
+    $display("%b    %b", D, Y);
+
+    D = 4'b0100;
+    #10;
+    $display("%b    %b", D, Y);
+
+    D = 4'b1000;
+    #10;
+    $display("%b    %b", D, Y);
+
+    $finish;
+
+end
+endmodule
