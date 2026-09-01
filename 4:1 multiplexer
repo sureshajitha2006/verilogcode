@@ -1,0 +1,98 @@
+design.v
+module mux2to1(
+    input I0,
+    input I1,
+    input S,
+    output Y
+);
+
+assign Y = S ? I1 : I0;
+
+endmodule
+
+
+module mux4to1(
+    input I0,
+    input I1,
+    input I2,
+    input I3,
+    input S0,
+    input S1,
+    output Y
+);
+
+wire W1, W2;
+mux2to1 MUX1(
+    .I0(I0),
+    .I1(I1),
+    .S(S0),
+    .Y(W1)
+);
+
+mux2to1 MUX2(
+    .I0(I2),
+    .I1(I3),
+    .S(S0),
+    .Y(W2)
+);
+mux2to1 MUX3(
+    .I0(W1),
+    .I1(W2),
+    .S(S1),
+    .Y(Y)
+);
+
+endmodule
+
+tb.v
+module tb_mux4to1;
+
+reg I0, I1, I2, I3;
+reg S0, S1;
+
+wire Y;
+
+mux4to1 DUT(
+    .I0(I0),
+    .I1(I1),
+    .I2(I2),
+    .I3(I3),
+    .S0(S0),
+    .S1(S1),
+    .Y(Y)
+);
+
+initial begin
+$dumpfile("dump.vcd");
+$dumpvars(0,tb_mux4to1);
+    $display("I0 I1 I2 I3  S1 S0  Y");
+    $display("------------------------");
+
+    I0=0; I1=1; I2=1; I3=0;
+    S1=0; S0=0;
+    #10;
+    $display("%b  %b  %b  %b    %b  %b   %b",
+             I0,I1,I2,I3,S1,S0,Y);
+
+
+    S1=0; S0=1;
+    #10;
+    $display("%b  %b  %b  %b    %b  %b   %b",
+             I0,I1,I2,I3,S1,S0,Y);
+
+ 
+    S1=1; S0=0;
+    #10;
+    $display("%b  %b  %b  %b    %b  %b   %b",
+             I0,I1,I2,I3,S1,S0,Y);
+
+    S1=1; S0=1;
+    #10;
+    $display("%b  %b  %b  %b    %b  %b   %b",
+             I0,I1,I2,I3,S1,S0,Y);
+
+    $finish;
+
+end
+
+endmodule
