@@ -1,0 +1,73 @@
+design.v
+
+module mux8to1(
+    input [7:0] I,
+    input [2:0] S,
+    output Ya
+);
+
+assign Y = S[2] ? (S[1] ? (S[0] ? I[7] : I[6]) : (S[0] ? I[5] : I[4]))
+                : (S[1] ? (S[0] ? I[3] : I[2])  : (S[0] ? I[1] :
+                 I[0]));
+
+endmodule
+
+tb.v
+
+// Testbench for 8:1 Multiplexer
+
+module tb_mux8to1;
+
+reg [7:0] I;
+reg [2:0] S;
+wire Y;
+
+mux8to1 DUT (
+    .I(I),
+    .S(S),
+    .Y(Y)
+);
+
+initial begin
+ $dumpfile("dump.vcd");
+ $dumpvars(0,tb_mux8to1);
+    $display("I  S |    Y");
+    $display("-----------------");
+
+    I = 8'b10101010; S = 3'b000;
+    #10;
+    $display("%b | %b  |  %b", I, S, Y);
+
+    I = 8'b10101010; S = 3'b001;
+    #10;
+    $display("%b |%b  |%b", I, S, Y);
+
+    I = 8'b10101010; S = 3'b010;
+    #10;
+    $display("%b |  %b | %b", I, S, Y);
+
+    I = 8'b10101010; S = 3'b011;
+    #10;
+    $display("%b |  %b  | %b", I, S, Y);
+
+    I = 8'b10101010; S = 3'b100;
+    #10;
+    $display("%b  | %b  | %b", I, S, Y);
+
+    I = 8'b10101010; S = 3'b101;
+    #10;
+    $display("%b  | %b   | %b", I, S, Y);
+
+    I = 8'b10101010; S = 3'b110;
+    #10;
+    $display("%b  | %b  |%b", I, S, Y);
+
+    I = 8'b10101010; S = 3'b111;
+    #10;
+    $display("%b  | %b  |  %b", I, S, Y);
+
+    $finish;
+
+end
+
+endmodule
