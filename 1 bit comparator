@@ -1,0 +1,68 @@
+design.v
+module comparator1bit(
+    input A,
+    input B,
+    output A_gt_B,
+    output A_eq_B,
+    output A_lt_B
+);
+
+assign A_gt_B = A & ~B;
+assign A_eq_B = ~(A ^ B);
+assign A_lt_B = ~A & B;
+
+endmodule
+
+tb.v
+
+module tb_comparator1bit;
+
+reg A;
+reg B;
+
+wire A_gt_B;
+wire A_eq_B;
+wire A_lt_B;
+
+comparator1bit DUT(
+    .A(A),
+    .B(B),
+    .A_gt_B(A_gt_B),
+    .A_eq_B(A_eq_B),
+    .A_lt_B(A_lt_B)
+);
+
+initial begin
+$dumpfile("dump.vcd");
+$dumpvars(0,tb_comparator1bit);
+    $display("A  B   A_gt_B  A_eq_B  A_lt_B");
+    $display("-------------------------------");
+
+    A = 1'b0;
+    B = 1'b0;
+    #10;
+    $display("%b  %b      %b       %b       %b",
+             A, B, A_gt_B, A_eq_B, A_lt_B);
+
+    A = 1'b0;
+    B = 1'b1;
+    #10;
+    $display("%b  %b      %b       %b       %b",
+             A, B, A_gt_B, A_eq_B, A_lt_B);
+
+    A = 1'b1;
+    B = 1'b0;
+    #10;
+    $display("%b  %b      %b       %b       %b",
+             A, B, A_gt_B, A_eq_B, A_lt_B);
+
+    A = 1'b1;
+    B = 1'b1;
+    #10;
+    $display("%b  %b      %b       %b       %b",
+             A, B, A_gt_B, A_eq_B, A_lt_B);
+
+    $finish;
+
+end
+endmodule
