@@ -1,0 +1,45 @@
+design.v
+ module binary_to_gray(
+    input  [1:0] B,
+    output [1:0] G
+);
+assign G[1] = B[1];
+assign G[0] = B[1] ^ B[0];
+
+endmodule
+
+tb.v
+module tb_binary_to_gray;
+
+reg [1:0] B;
+wire [1:0] G;
+binary_to_gray DUT(
+    .B(B),
+    .G(G)
+);
+initial begin
+     $dumpfile("dump.vcd");
+$dumpvars(0,tb_binary_to_gray);
+    $display("Binary |   Gray");
+    $display("----------------");
+    B = 2'b00;
+    #10;
+    $display("  %b  |   %b", B, G);
+
+    B = 2'b01;
+    #10;
+    $display("  %b|  %b", B, G);
+
+    B = 2'b10;
+    #10;
+    $display("  %b  | %b", B, G);
+
+    B = 2'b11;
+    #10;
+    $display("  %b |  %b", B, G);
+
+    $finish;
+
+end
+
+endmodule
